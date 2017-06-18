@@ -31,7 +31,7 @@ This will build, test and run the application. You'll be prompted for the videos
 where you have the mp4 files you want to serve. 
 (Note: there is no pagination in place, so beware if you are trying to serve a directory with lots of files)  
 - Browse to the videos at [http://localhost:8080/videos](http://localhost:8080/videos).  
-- Pick a video to listen to!  
+- Pick a video to watch to!  
 You can see in your browser Network panel or in the video progress bar that parts of the video are
 being downloaded as it gets played.
 
