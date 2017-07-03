@@ -35,6 +35,12 @@ where you have the mp4 files you want to serve.
 You can see in your browser Network Panel or in the video progress bar that parts of the video are
 being downloaded as it gets played.
 
-# Contact
-If you have any questions or suggestions, please ping:
-- André Schaffer (https://github.com/andreschaffer, https://twitter.com/andreschaffer)
+# Contributing
+If you would like to help making this project better, see the [CONTRIBUTING.md](CONTRIBUTING.md).  
+
+# Maintainers
+Send any other comments, flowers and suggestions to:
+- [André Schaffer](https://github.com/andreschaffer)
+
+# License
+This project is distributed under the [MIT License](LICENSE).
