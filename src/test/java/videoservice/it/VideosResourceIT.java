@@ -1,16 +1,16 @@
 package videoservice.it;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import javax.ws.rs.core.Response;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class VideosResourceIT extends BaseIT {
+class VideosResourceIT extends BaseIT {
 
   @Test
-  public void returnVideos() throws Exception {
+  void returnVideos() {
     Response response = client.getVideos();
     assertThat(response.getStatus(), equalTo(200));
     ArrayNode videos = response.readEntity(ArrayNode.class);

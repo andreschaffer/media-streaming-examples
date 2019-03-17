@@ -63,7 +63,10 @@ public class VideoResource {
 
   private boolean ifRangePreconditionMatches(File file, String ifRangeHeader) {
     ZonedDateTime ifRangeLastModified = ZonedDateTime.parse(ifRangeHeader, httpDateFormat);
-    ZonedDateTime fileLastModified = ZonedDateTime.ofInstant(new Date(file.lastModified()).toInstant(), UTC);
+    ZonedDateTime fileLastModified = ZonedDateTime.parse(
+        httpDateFormat.format(new Date(file.lastModified()).toInstant()),
+        httpDateFormat);
+
     return ifRangeLastModified.equals(fileLastModified);
   }
 

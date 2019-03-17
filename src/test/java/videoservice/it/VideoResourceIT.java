@@ -4,8 +4,8 @@ import static com.google.common.io.Resources.getResource;
 import static java.lang.String.format;
 import static java.nio.file.Files.readAllBytes;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.io.ByteSource;
 import java.io.File;
@@ -13,20 +13,19 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.Arrays;
 import javax.ws.rs.core.Response;
 import org.apache.http.message.BasicHeader;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import videoservice.resources.Range;
 
-public class VideoResourceIT extends BaseIT {
+class VideoResourceIT extends BaseIT {
 
   private static final HttpDateFormat httpDateFormat = new HttpDateFormat();
   private static final long defaultPartialLength = 1024L * 1024L;
 
   @Test
-  public void returnVideoNotFound() throws Exception {
+  void returnVideoNotFound() {
     String wrongVideoId = "wrong-video.mp4";
     Response response = client.getVideo(wrongVideoId);
     response.close();
@@ -34,7 +33,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnFullVideoWhenRangeIsNotPresent() throws Exception {
+  void returnFullVideoWhenRangeIsNotPresent() throws Exception {
     byte[] expectedVideo = readVideoFileBytes(Fixtures.videoId);
 
     Response response = client.getVideo(Fixtures.videoId);
@@ -47,7 +46,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnVideoPartWithDefaultLengthForRangeWithoutMaxValue() throws Exception {
+  void returnVideoPartWithDefaultLengthForRangeWithoutMaxValue() throws Exception {
     byte[] expectedVideo = readVideoFileBytes(Fixtures.videoId);
     Range expectedRange = Range.leftClosed(0L, defaultPartialLength);
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
@@ -62,7 +61,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnVideoPartAccordingToRange() throws Exception {
+  void returnVideoPartAccordingToRange() throws Exception {
     byte[] expectedVideo = readVideoFileBytes(Fixtures.videoId);
     long min = 1024L * 1024L;
     long max = 1024L * 2048L;
@@ -79,7 +78,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnVideoPartRespectingEndOfFileForRangeWithoutMaxValue() throws Exception {
+  void returnVideoPartRespectingEndOfFileForRangeWithoutMaxValue() throws Exception {
     byte[] expectedVideo = readVideoFileBytes(Fixtures.videoId);
     long max = expectedVideo.length;
     long min = max - 1000L;
@@ -96,7 +95,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnNotModifiedWhenIfModifiedSincePreconditionIsFalse() throws Exception {
+  void returnNotModifiedWhenIfModifiedSincePreconditionIsFalse() throws Exception {
     File video = videoFilePath(Fixtures.videoId).toFile();
     String ifModifiedSince = httpDateFormat.format(video.lastModified());
     long min = 1024L * 1024L;
@@ -111,9 +110,9 @@ public class VideoResourceIT extends BaseIT {
   }
 
   @Test
-  public void returnVideoPartWhenIfModifiedSincePreconditionIsTrue() throws Exception {
+  void returnVideoPartWhenIfModifiedSincePreconditionIsTrue() throws Exception {
     File video = videoFilePath(Fixtures.videoId).toFile();
-    String ifModifiedSince = httpDateFormat.format(video.lastModified() - 1);
+    String ifModifiedSince = httpDateFormat.format(video.lastModified() - 1000);
     long min = 1024L * 1024L;
     long max = 1024L * 2048L;
     Range expectedRange = Range.closed(min, max);
@@ -125,11 +124,13 @@ public class VideoResourceIT extends BaseIT {
     response.close();
     assertThat(response.getStatus(), equalTo(206));
     verifyPartialContentHeaders(response, expectedRange, video.length());
-    assertThat(httpDateFormat.parse(response.getHeaderString("Last-Modified")).getTime(), equalTo(video.lastModified()));
+    assertThat(
+        response.getHeaderString("Last-Modified"),
+        equalTo(httpDateFormat.format(video.lastModified())));
   }
 
   @Test
-  public void returnVideoPartWhenIfRangePreconditionIsTrue() throws Exception {
+  void returnVideoPartWhenIfRangePreconditionIsTrue() throws Exception {
     File video = videoFilePath(Fixtures.videoId).toFile();
     String ifRangeLastModified = httpDateFormat.format(video.lastModified());
     long min = 1024L * 1024L;
@@ -143,14 +144,15 @@ public class VideoResourceIT extends BaseIT {
     response.close();
     assertThat(response.getStatus(), equalTo(206));
     verifyPartialContentHeaders(response, expectedRange, video.length());
-    assertThat(httpDateFormat.parse(response.getHeaderString("Last-Modified")).getTime(),
-        equalTo(video.lastModified()));
+    assertThat(
+        response.getHeaderString("Last-Modified"),
+        equalTo(httpDateFormat.format(video.lastModified())));
   }
 
   @Test
-  public void returnFullVideoWhenIfRangePreconditionIsFalse() throws Exception {
+  void returnFullVideoWhenIfRangePreconditionIsFalse() throws Exception {
     File video = videoFilePath(Fixtures.videoId).toFile();
-    String ifRangeLastModified = httpDateFormat.format(video.lastModified() - 1);
+    String ifRangeLastModified = httpDateFormat.format(video.lastModified() - 1000);
     long min = 1024L * 1024L;
     long max = 1024L * 2048L;
 
@@ -161,8 +163,9 @@ public class VideoResourceIT extends BaseIT {
     response.close();
     assertThat(response.getStatus(), equalTo(200));
     assertThat(response.getHeaderString("Accept-Ranges"), equalTo("bytes"));
-    assertThat(httpDateFormat.parse(response.getHeaderString("Last-Modified")).getTime(),
-        equalTo(video.lastModified()));
+    assertThat(
+        response.getHeaderString("Last-Modified"),
+        equalTo(httpDateFormat.format(video.lastModified())));
   }
 
   private byte[] readVideoFileBytes(String id) throws IOException {
@@ -182,7 +185,7 @@ public class VideoResourceIT extends BaseIT {
   }
 
   private void verifyPartialContentHeaders(Response response, Range expectedRange,
-                                           long expectedFullContentLength) throws ParseException {
+                                           long expectedFullContentLength) {
 
     assertThat(response.getHeaderString("Accept-Ranges"), equalTo("bytes"));
 

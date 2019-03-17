@@ -2,23 +2,24 @@ package videoservice.it;
 
 import static io.dropwizard.testing.ResourceHelpers.resourceFilePath;
 
-import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
+import io.dropwizard.testing.junit5.DropwizardAppExtension;
+import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import videoservice.bootstrap.VideoServiceApplication;
 import videoservice.bootstrap.VideoServiceConfiguration;
 import videoservice.it.client.ResourcesClient;
 
-public class BaseIT {
+@ExtendWith(DropwizardExtensionsSupport.class)
+class BaseIT {
 
-  @ClassRule
-  public static final DropwizardAppRule<VideoServiceConfiguration> SERVICE =
-      new DropwizardAppRule<>(VideoServiceApplication.class, resourceFilePath("integration.yml"));
+  protected static final DropwizardAppExtension<VideoServiceConfiguration> SERVICE =
+      new DropwizardAppExtension<>(VideoServiceApplication.class, resourceFilePath("integration.yml"));
 
   protected static ResourcesClient client;
 
-  @BeforeClass
-  public static void setUp() throws Exception {
+  @BeforeAll
+  static void setUp() {
     client = new ResourcesClient(SERVICE.getEnvironment(), SERVICE.getLocalPort());
   }
 }

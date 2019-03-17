@@ -1,14 +1,15 @@
 package videoservice.resources;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RangeTest {
+class RangeTest {
 
   @Test
-  public void closed() throws Exception {
+  void closed() {
     Range range = Range.closed(0L, 2L);
     assertThat(range.getMin(), equalTo(0L));
     assertThat(range.getMax(), equalTo(2L));
@@ -16,7 +17,7 @@ public class RangeTest {
   }
 
   @Test
-  public void leftClosed() throws Exception {
+  void leftClosed() {
     Range range = Range.leftClosed(0L, 2L);
     assertThat(range.getMin(), equalTo(0L));
     assertThat(range.getMax(), equalTo(1L));
@@ -24,7 +25,7 @@ public class RangeTest {
   }
 
   @Test
-  public void closedWithSinglePoint() throws Exception {
+  void closedWithSinglePoint() {
     Range range = Range.closed(1L, 1L);
     assertThat(range.getMin(), equalTo(1L));
     assertThat(range.getMax(), equalTo(1L));
@@ -32,30 +33,42 @@ public class RangeTest {
   }
 
   @Test
-  public void leftClosedWithSinglePoint() throws Exception {
+  void leftClosedWithSinglePoint() {
     Range range = Range.leftClosed(1L, 2L);
     assertThat(range.getMin(), equalTo(1L));
     assertThat(range.getMax(), equalTo(1L));
     assertThat(range.getLength(), equalTo(1L));
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void closedRequiresNonNegativeLowerEndpoint() throws Exception {
-    Range.closed(-1L, 2L);
+  @Test
+  void closedRequiresNonNegativeLowerEndpoint() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> Range.closed(-1L, 2L)
+    );
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void leftClosedRequiresNonNegativeLowerEndpoint() throws Exception {
-    Range.leftClosed(-1L, 2L);
+  @Test
+  void leftClosedRequiresNonNegativeLowerEndpoint() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> Range.leftClosed(-1L, 2L)
+    );
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void closedRequiresUpperEndpointGreaterThanOrEqualToLowerEndpoint() throws Exception {
-    Range.closed(1L, 0L);
+  @Test
+  void closedRequiresUpperEndpointGreaterThanOrEqualToLowerEndpoint() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> Range.closed(1L, 0L)
+    );
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  public void leftClosedRequiresUpperEndpointGreaterThanLowerEndpoint() throws Exception {
-    Range.leftClosed(1L, 1L);
+  @Test
+  void leftClosedRequiresUpperEndpointGreaterThanLowerEndpoint() {
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> Range.leftClosed(1L, 1L)
+    );
   }
 }

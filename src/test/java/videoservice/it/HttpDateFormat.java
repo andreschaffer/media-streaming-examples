@@ -3,9 +3,11 @@ package videoservice.it;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Following RFC 1123, datetime is truncated to seconds.
+ * */
 public class HttpDateFormat {
 
   private final DateFormat dateFormat;
@@ -15,8 +17,8 @@ public class HttpDateFormat {
     dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
   }
 
-  public Date parse(String dateTime) throws ParseException {
-    return dateFormat.parse(dateTime);
+  public void parse(String dateTime) throws ParseException {
+    dateFormat.parse(dateTime);
   }
 
   public String format(long dateTimeInMillis) {
