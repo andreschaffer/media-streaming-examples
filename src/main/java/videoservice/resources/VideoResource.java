@@ -1,30 +1,27 @@
 package videoservice.resources;
 
-import static java.time.ZoneOffset.UTC;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
-
 import com.google.common.io.ByteSource;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+import videoservice.repository.VideosRepository;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.StreamingOutput;
-import videoservice.repository.VideosRepository;
+
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
 
 @Produces("video/mp4")
 @Path("/videos/{id}")
@@ -40,28 +37,32 @@ public class VideoResource {
   }
 
   @GET
-  public Response get(@PathParam("id") String id, @Context Request request,
+  public Response get(@Context Request request,
+                      @PathParam("id") String id,
                       @HeaderParam("Range") Optional<String> range,
                       @HeaderParam("If-Range") Optional<String> ifRange) {
 
     Optional<File> video = videosRepository.findById(id);
-    if (!video.isPresent()) return Response.status(NOT_FOUND).build();
+    if (video.isEmpty()) return Response.status(NOT_FOUND).build();
 
-    Optional<Response> notModifiedResponse = evaluateRequestPreconditions(video.get(), request);
+    Optional<Response> notModifiedResponse = evaluateConditionalHeaders(video.get(), request);
     if (notModifiedResponse.isPresent()) return notModifiedResponse.get();
 
-    if (range.isPresent() && (!ifRange.isPresent() || ifRangePreconditionMatches(video.get(), ifRange.get())))
-      return videoPartResponse(video.get(), range.get());
+    if (rangeRequest(range, ifRange, video.get())) return videoPartResponse(video.get(), range.get());
 
     return fullVideoResponse(video.get());
   }
 
-  private Optional<Response> evaluateRequestPreconditions(File file, Request request) {
+  private Optional<Response> evaluateConditionalHeaders(File file, Request request) {
     ResponseBuilder notModifiedResponseBuilder = request.evaluatePreconditions(new Date(file.lastModified()));
     return Optional.ofNullable(notModifiedResponseBuilder).map(ResponseBuilder::build);
   }
 
-  private boolean ifRangePreconditionMatches(File file, String ifRangeHeader) {
+  private boolean rangeRequest(Optional<String> range, Optional<String> ifRange, File file) {
+    return range.isPresent() && (ifRange.isEmpty() || ifRangePreconditionMatches(ifRange.get(), file));
+  }
+
+  private boolean ifRangePreconditionMatches(String ifRangeHeader, File file) {
     ZonedDateTime ifRangeLastModified = ZonedDateTime.parse(ifRangeHeader, httpDateFormat);
     ZonedDateTime fileLastModified = ZonedDateTime.parse(
         httpDateFormat.format(new Date(file.lastModified()).toInstant()),
