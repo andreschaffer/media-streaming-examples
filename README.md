@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/andreschaffer/http-progressive-download-examples.svg?branch=master)](https://travis-ci.org/andreschaffer/http-progressive-download-examples)
 [![Coverage Status](https://coveralls.io/repos/github/andreschaffer/http-progressive-download-examples/badge.svg?branch=master)](https://coveralls.io/github/andreschaffer/http-progressive-download-examples?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0066bab95b5750190807/maintainability)](https://codeclimate.com/github/andreschaffer/http-progressive-download-examples/maintainability)
+
 # Http Progressive Download Examples
 
 # Waiting is losing
