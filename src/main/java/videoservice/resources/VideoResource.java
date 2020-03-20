@@ -102,6 +102,7 @@ public class VideoResource {
     };
   }
 
+  @SuppressWarnings("StringSplitter")
   private Range calculateRange(File file, String rangeHeader) {
     String[] ranges = rangeHeader.split("=")[1].split("-");
     long min = Long.parseLong(ranges[0]);
