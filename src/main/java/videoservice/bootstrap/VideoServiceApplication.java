@@ -25,24 +25,23 @@ public class VideoServiceApplication extends Application<VideoServiceConfigurati
   }
 
   @Override
-  public void run(VideoServiceConfiguration configuration, Environment environment) throws Exception {
-    registerHypermediaSupport(environment);
-    registerResources(configuration, environment);
-    configureOutboundContentLengthBuffer(environment);
+  public void run(VideoServiceConfiguration config, Environment env) {
+    registerHypermediaSupport(env);
+    registerResources(config, env);
+    configureOutboundContentLengthBuffer(env);
   }
 
-  private void configureOutboundContentLengthBuffer(final Environment environment) {
-    environment.jersey().getResourceConfig().property(OUTBOUND_CONTENT_LENGTH_BUFFER, 5120 * 1024);
+  private void configureOutboundContentLengthBuffer(Environment env) {
+    env.jersey().getResourceConfig().property(OUTBOUND_CONTENT_LENGTH_BUFFER, 5120 * 1024);
   }
 
-  private void registerHypermediaSupport(Environment environment) {
-    environment.jersey().getResourceConfig().register(DeclarativeLinkingFeature.class);
+  private void registerHypermediaSupport(Environment env) {
+    env.jersey().getResourceConfig().register(DeclarativeLinkingFeature.class);
   }
 
-  private void registerResources(VideoServiceConfiguration configuration,
-                                 Environment environment) {
-    VideosRepository videosRepository = new VideosRepository(configuration.videosDirectory);
-    environment.jersey().register(new VideosResource(videosRepository));
-    environment.jersey().register(new VideoResource(videosRepository));
+  private void registerResources(VideoServiceConfiguration config, Environment env) {
+    VideosRepository videosRepository = new VideosRepository(config.videosDirectory);
+    env.jersey().register(new VideosResource(videosRepository));
+    env.jersey().register(new VideoResource(videosRepository));
   }
 }

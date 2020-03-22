@@ -50,9 +50,9 @@ class VideoResourceIT extends BaseIT {
     byte[] expectedVideo = readVideoFileBytes(Fixtures.videoId);
     Range expectedRange = Range.leftClosed(0L, defaultPartialLength);
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
-    
+
     Response response = client.getVideo(Fixtures.videoId, new BasicHeader("Range", "bytes=0-"));
-    
+
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
     assertTrue(Arrays.equals(actualVideoPart, expectedVideoPart));
@@ -68,7 +68,8 @@ class VideoResourceIT extends BaseIT {
     Range expectedRange = Range.closed(min, max);
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
 
-    Response response = client.getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-%d", min, max)));
+    Response response = client
+        .getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-%d", min, max)));
 
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
@@ -85,7 +86,8 @@ class VideoResourceIT extends BaseIT {
     Range expectedRange = Range.leftClosed(min, max);
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
 
-    Response response = client.getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-", min)));
+    Response response = client
+        .getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-", min)));
 
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
@@ -184,8 +186,9 @@ class VideoResourceIT extends BaseIT {
     return ByteSource.wrap(video).slice(range.getMin(), range.getLength()).read();
   }
 
-  private void verifyPartialContentHeaders(Response response, Range expectedRange,
-                                           long expectedFullContentLength) {
+  private void verifyPartialContentHeaders(Response response,
+      Range expectedRange,
+      long expectedFullContentLength) {
 
     assertThat(response.getHeaderString("Accept-Ranges"), equalTo("bytes"));
 

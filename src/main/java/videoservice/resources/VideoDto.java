@@ -10,7 +10,9 @@ public class VideoDto {
 
   private String id;
 
-  @InjectLink(style = ABSOLUTE, resource = VideoResource.class, bindings = {@Binding("${instance.id}")})
+  @InjectLink(style = ABSOLUTE,
+      resource = VideoResource.class,
+      bindings = {@Binding("${instance.id}")})
   private URI link;
 
   public String getId() {

@@ -1,27 +1,30 @@
 package videoservice.resources;
 
+import static java.time.ZoneOffset.UTC;
+import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
+
 import com.google.common.io.ByteSource;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
-import videoservice.repository.VideosRepository;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.StreamingOutput;
 import java.io.File;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
-
-import static java.time.ZoneOffset.UTC;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
-import static javax.ws.rs.core.Response.Status.PARTIAL_CONTENT;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.StreamingOutput;
+import videoservice.repository.VideosRepository;
 
 @Produces("video/mp4")
 @Path("/videos/{id}")
@@ -38,28 +41,36 @@ public class VideoResource {
 
   @GET
   public Response get(@Context Request request,
-                      @PathParam("id") String id,
-                      @HeaderParam("Range") Optional<String> range,
-                      @HeaderParam("If-Range") Optional<String> ifRange) {
+      @PathParam("id") String id,
+      @HeaderParam("Range") Optional<String> range,
+      @HeaderParam("If-Range") Optional<String> ifRange) {
 
     Optional<File> video = videosRepository.findById(id);
-    if (video.isEmpty()) return Response.status(NOT_FOUND).build();
+    if (video.isEmpty()) {
+      return Response.status(NOT_FOUND).build();
+    }
 
     Optional<Response> notModifiedResponse = evaluateConditionalHeaders(video.get(), request);
-    if (notModifiedResponse.isPresent()) return notModifiedResponse.get();
+    if (notModifiedResponse.isPresent()) {
+      return notModifiedResponse.get();
+    }
 
-    if (rangeRequest(range, ifRange, video.get())) return videoPartResponse(video.get(), range.get());
+    if (rangeRequest(range, ifRange, video.get())) {
+      return videoPartResponse(video.get(), range.get());
+    }
 
     return fullVideoResponse(video.get());
   }
 
   private Optional<Response> evaluateConditionalHeaders(File file, Request request) {
-    ResponseBuilder notModifiedResponseBuilder = request.evaluatePreconditions(new Date(file.lastModified()));
+    ResponseBuilder notModifiedResponseBuilder = request
+        .evaluatePreconditions(new Date(file.lastModified()));
     return Optional.ofNullable(notModifiedResponseBuilder).map(ResponseBuilder::build);
   }
 
   private boolean rangeRequest(Optional<String> range, Optional<String> ifRange, File file) {
-    return range.isPresent() && (ifRange.isEmpty() || ifRangePreconditionMatches(ifRange.get(), file));
+    return range.isPresent()
+        && (ifRange.isEmpty() || ifRangePreconditionMatches(ifRange.get(), file));
   }
 
   private boolean ifRangePreconditionMatches(String ifRangeHeader, File file) {
@@ -89,7 +100,7 @@ public class VideoResource {
         .entity(stream)
         .header("Accept-Ranges", "bytes")
         .header("Content-Range", toContentRange(range, file.length()))
-        .header("Content-Length",range.getLength())
+        .header("Content-Length", range.getLength())
         .header("Last-Modified", new Date(file.lastModified()))
         .build();
   }
@@ -106,9 +117,10 @@ public class VideoResource {
   private Range calculateRange(File file, String rangeHeader) {
     String[] ranges = rangeHeader.split("=")[1].split("-");
     long min = Long.parseLong(ranges[0]);
-    return ranges.length == 2 ?
-           Range.closed(min, Long.parseLong(ranges[1])) :
-           Range.leftClosed(min, Long.min(file.length(), min + defaultPartialLength));
+    return ranges.length == 2
+        ?
+        Range.closed(min, Long.parseLong(ranges[1])) :
+        Range.leftClosed(min, Long.min(file.length(), min + defaultPartialLength));
   }
 
   private ByteSource sliceFile(File file, Range range) {

@@ -7,7 +7,7 @@ import java.util.TimeZone;
 
 /**
  * Following RFC 1123, datetime is truncated to seconds.
- * */
+ */
 public class HttpDateFormat {
 
   private final DateFormat dateFormat;

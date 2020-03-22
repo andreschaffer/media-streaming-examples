@@ -18,13 +18,18 @@ class DirectoryFinder {
   }
 
   private File firstNonNull(File file1, File file2, String errorMessage) {
-    if (file1 != null) return file1;
-    if (file2 != null) return file2;
+    if (file1 != null) {
+      return file1;
+    }
+    if (file2 != null) {
+      return file2;
+    }
     throw new IllegalArgumentException(errorMessage);
   }
 
   private Optional<File> getDirectoryFromClassLocation(String path) throws URISyntaxException {
-    File file = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().resolve(path));
+    File file = new File(
+        getClass().getProtectionDomain().getCodeSource().getLocation().toURI().resolve(path));
     return file.isDirectory() ? Optional.of(file) : Optional.empty();
   }
 

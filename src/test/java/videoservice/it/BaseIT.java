@@ -14,7 +14,8 @@ import videoservice.it.client.ResourcesClient;
 class BaseIT {
 
   protected static final DropwizardAppExtension<VideoServiceConfiguration> SERVICE =
-      new DropwizardAppExtension<>(VideoServiceApplication.class, resourceFilePath("integration.yml"));
+      new DropwizardAppExtension<>(VideoServiceApplication.class,
+          resourceFilePath("integration.yml"));
 
   protected static ResourcesClient client;
 

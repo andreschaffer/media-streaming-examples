@@ -12,7 +12,9 @@ public class VideoServiceConfiguration extends Configuration {
   @NotNull
   final File videosDirectory;
 
-  public VideoServiceConfiguration(@JsonProperty("videosDirectory") String videosDirectory) throws Exception {
+  public VideoServiceConfiguration(@JsonProperty("videosDirectory") String videosDirectory)
+      throws Exception {
+
     checkNotNull(videosDirectory, "videosDirectory may not be null");
     this.videosDirectory = new DirectoryFinder().find(videosDirectory);
   }
