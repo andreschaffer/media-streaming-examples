@@ -3,8 +3,8 @@ package videoservice.it;
 import static com.google.common.io.Resources.getResource;
 import static java.lang.String.format;
 import static java.nio.file.Files.readAllBytes;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.common.io.ByteSource;
@@ -13,9 +13,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import javax.ws.rs.core.Response;
-import org.apache.http.message.BasicHeader;
 import org.junit.jupiter.api.Test;
 import videoservice.resources.Range;
 
@@ -51,7 +51,7 @@ class VideoResourceIT extends BaseIT {
     Range expectedRange = Range.leftClosed(0L, defaultPartialLength);
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
 
-    Response response = client.getVideo(Fixtures.videoId, new BasicHeader("Range", "bytes=0-"));
+    Response response = client.getVideo(Fixtures.videoId, new SimpleEntry<>("Range", "bytes=0-"));
 
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
@@ -69,7 +69,7 @@ class VideoResourceIT extends BaseIT {
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
 
     Response response = client
-        .getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-%d", min, max)));
+        .getVideo(Fixtures.videoId, new SimpleEntry<>("Range", format("bytes=%d-%d", min, max)));
 
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
@@ -87,7 +87,7 @@ class VideoResourceIT extends BaseIT {
     byte[] expectedVideoPart = sliceFile(expectedVideo, expectedRange);
 
     Response response = client
-        .getVideo(Fixtures.videoId, new BasicHeader("Range", format("bytes=%d-", min)));
+        .getVideo(Fixtures.videoId, new SimpleEntry<>("Range", format("bytes=%d-", min)));
 
     assertThat(response.getStatus(), equalTo(206));
     byte[] actualVideoPart = response.readEntity(byte[].class);
@@ -104,8 +104,8 @@ class VideoResourceIT extends BaseIT {
     long max = 1024L * 2048L;
 
     Response response = client.getVideo(Fixtures.videoId,
-        new BasicHeader("Range", format("bytes=%d-%d", min, max)),
-        new BasicHeader("If-Modified-Since", ifModifiedSince));
+        new SimpleEntry<>("Range", format("bytes=%d-%d", min, max)),
+        new SimpleEntry<>("If-Modified-Since", ifModifiedSince));
 
     response.close();
     assertThat(response.getStatus(), equalTo(304));
@@ -120,8 +120,8 @@ class VideoResourceIT extends BaseIT {
     Range expectedRange = Range.closed(min, max);
 
     Response response = client.getVideo(Fixtures.videoId,
-        new BasicHeader("Range", format("bytes=%d-%d", min, max)),
-        new BasicHeader("If-Modified-Since", ifModifiedSince));
+        new SimpleEntry<>("Range", format("bytes=%d-%d", min, max)),
+        new SimpleEntry<>("If-Modified-Since", ifModifiedSince));
 
     response.close();
     assertThat(response.getStatus(), equalTo(206));
@@ -140,8 +140,8 @@ class VideoResourceIT extends BaseIT {
     Range expectedRange = Range.closed(min, max);
 
     Response response = client.getVideo(Fixtures.videoId,
-        new BasicHeader("Range", format("bytes=%d-%d", min, max)),
-        new BasicHeader("If-Range", ifRangeLastModified));
+        new SimpleEntry<>("Range", format("bytes=%d-%d", min, max)),
+        new SimpleEntry<>("If-Range", ifRangeLastModified));
 
     response.close();
     assertThat(response.getStatus(), equalTo(206));
@@ -159,8 +159,8 @@ class VideoResourceIT extends BaseIT {
     long max = 1024L * 2048L;
 
     Response response = client.getVideo(Fixtures.videoId,
-        new BasicHeader("Range", format("bytes=%d-%d", min, max)),
-        new BasicHeader("If-Range", ifRangeLastModified));
+        new SimpleEntry<>("Range", format("bytes=%d-%d", min, max)),
+        new SimpleEntry<>("If-Range", ifRangeLastModified));
 
     response.close();
     assertThat(response.getStatus(), equalTo(200));

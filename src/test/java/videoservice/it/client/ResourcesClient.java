@@ -10,11 +10,11 @@ import static org.glassfish.jersey.logging.LoggingFeature.Verbosity.PAYLOAD_ANY;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Environment;
 import java.util.Arrays;
+import java.util.Map.Entry;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import org.apache.http.Header;
 import org.glassfish.jersey.logging.LoggingFeature;
 
 public class ResourcesClient {
@@ -39,17 +39,14 @@ public class ResourcesClient {
     return client.target(resourcesUrls.videosUrl()).request().get();
   }
 
-  public Response getVideo(String videoId, Header... headers) {
-    return getVideo(videoId, toMap(headers));
+  public Response getVideo(String videoId, Entry<String, Object>... headers) {
+    MultivaluedMap<String, Object> headersMap = toMap(headers);
+    return client.target(resourcesUrls.videoUrl(videoId)).request().headers(headersMap).get();
   }
 
-  public Response getVideo(String videoId, MultivaluedMap<String, Object> headers) {
-    return client.target(resourcesUrls.videoUrl(videoId)).request().headers(headers).get();
-  }
-
-  private MultivaluedMap<String, Object> toMap(Header... headers) {
+  private MultivaluedMap<String, Object> toMap(Entry<String, Object>... headers) {
     MultivaluedMap<String, Object> headersMap = new MultivaluedHashMap<>();
-    Arrays.stream(headers).forEach(h -> headersMap.add(h.getName(), h.getValue()));
+    Arrays.stream(headers).forEach(h -> headersMap.add(h.getKey(), h.getValue()));
     return headersMap;
   }
 }

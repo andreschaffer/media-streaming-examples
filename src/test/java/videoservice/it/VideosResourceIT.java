@@ -1,7 +1,7 @@
 package videoservice.it;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import javax.ws.rs.core.Response;
