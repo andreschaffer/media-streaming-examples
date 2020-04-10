@@ -13,8 +13,8 @@ to serve videos in that manner.
 
 # [RFC 7233 - Range Requests](https://tools.ietf.org/html/rfc7233)
 TL;DR flow explanation:  
-- The client makes an initial request for a video and receives a server response with no payload so far
- but the headers "Accept-Ranges: bytes" and "Content-Length: _video_length_in_bytes_" indicating that 
+- The client makes an initial request for a video and receives a server response with no payload so far,
+ but with the headers "Accept-Ranges: bytes" and "Content-Length: _video_length_in_bytes_" indicating that 
  it accepts range requests to deliver partial contents.  
 - The client then makes a range request for the first part of the video using the header 
  "Range: bytes=0-" and receives a 206 Partial Content response back from the server with the bytes 
