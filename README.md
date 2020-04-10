@@ -18,7 +18,7 @@ TL;DR flow explanation:
  it accepts range requests to deliver partial contents.  
 - The client then makes a range request for the first part of the video using the header 
  "Range: bytes=0-" and receives a 206 Partial Content response back from the server with the bytes 
- corresponding to the first part of the video as payload together with the header "Content-Range: 0-_video_part_byte_end_position_/_video_length_in_bytes_".  
+ corresponding to the first part of the video as payload, together with the header "Content-Range: 0-_video_part_byte_end_position_/_video_length_in_bytes_".  
 - The client keeps making new requests as the video parts are played, e.g. "Range: bytes=_next_video_part_byte_start_position_-_next_video_part_byte_end_position_".  
 - Since we are serving potentially large files, it makes sense to take advantage of HTTP caching mechanisms in order to avoid unnecessary retransmissions over the wire. 
  We achieve that via Conditional Requests ([RFC 7232](https://tools.ietf.org/html/rfc7232), [https://github.com/andreschaffer/http-caching-and-concurrency-examples](https://github.com/andreschaffer/http-caching-and-concurrency-examples));
@@ -32,7 +32,7 @@ TL;DR flow explanation:
 - Run ./run.sh .  
 This will build, test and run the application. You'll be prompted for the videos directory 
 where you have the mp4 files you want to serve. 
-(Note: there is no pagination in place, so beware if you are trying to serve a directory with lots of files)  
+(Note: there is no pagination in place here, so beware if you are trying to serve a directory with lots of files)  
 - Browse to the videos at [http://localhost:8080/videos](http://localhost:8080/videos).  
 - Pick a video to watch to!  
 You can see in your browser Network Panel or in the video progress bar that parts of the video are
