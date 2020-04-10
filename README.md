@@ -1,9 +1,9 @@
-![Build](https://github.com/andreschaffer/http-progressive-download-examples/workflows/Build/badge.svg)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/0066bab95b5750190807/test_coverage)](https://codeclimate.com/github/andreschaffer/http-progressive-download-examples/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/0066bab95b5750190807/maintainability)](https://codeclimate.com/github/andreschaffer/http-progressive-download-examples/maintainability)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=andreschaffer/http-progressive-download-examples)](https://dependabot.com)
+![Build](https://github.com/andreschaffer/media-streaming-examples/workflows/Build/badge.svg)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d1343c04594ef9155e38/test_coverage)](https://codeclimate.com/github/andreschaffer/media-streaming-examples/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1343c04594ef9155e38/maintainability)](https://codeclimate.com/github/andreschaffer/media-streaming-examples/maintainability)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=andreschaffer/media-streaming-examples)](https://dependabot.com)
 
-# Http Progressive Download Examples
+# Media Streaming Examples
 
 # Waiting is losing
 When serving large media files, it's desirable to allow clients to start playback of the media 
