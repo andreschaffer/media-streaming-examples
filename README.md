@@ -25,7 +25,7 @@ TL;DR flow explanation:
  in this project specifically we explored that with the headers "Last-Modified" and "If-Range".
 
 # Project Requirements
-- Java 12
+- Java 14
 - Maven
 
 # Trying it out
