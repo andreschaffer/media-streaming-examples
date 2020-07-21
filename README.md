@@ -1,7 +1,7 @@
 ![Build](https://github.com/andreschaffer/media-streaming-examples/workflows/Build/badge.svg)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d1343c04594ef9155e38/test_coverage)](https://codeclimate.com/github/andreschaffer/media-streaming-examples/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d1343c04594ef9155e38/maintainability)](https://codeclimate.com/github/andreschaffer/media-streaming-examples/maintainability)
-[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=andreschaffer/media-streaming-examples)](https://dependabot.com)
+[![Dependabot](https://img.shields.io/badge/Dependabot-enabled-blue)](https://docs.github.com/en/github/administering-a-repository/keeping-your-dependencies-updated-automatically)
 
 # Media Streaming Examples
 
