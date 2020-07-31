@@ -10,6 +10,7 @@ import static org.glassfish.jersey.logging.LoggingFeature.Verbosity.PAYLOAD_ANY;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Environment;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MultivaluedHashMap;
@@ -39,12 +40,12 @@ public class ResourcesClient {
     return client.target(resourcesUrls.videosUrl()).request().get();
   }
 
-  public Response getVideo(String videoId, Entry<String, Object>... headers) {
+  public Response getVideo(String videoId, Map.Entry<String, Object>... headers) {
     MultivaluedMap<String, Object> headersMap = toMap(headers);
     return client.target(resourcesUrls.videoUrl(videoId)).request().headers(headersMap).get();
   }
 
-  private MultivaluedMap<String, Object> toMap(Entry<String, Object>... headers) {
+  private MultivaluedMap<String, Object> toMap(Map.Entry<String, Object>... headers) {
     MultivaluedMap<String, Object> headersMap = new MultivaluedHashMap<>();
     Arrays.stream(headers).forEach(h -> headersMap.add(h.getKey(), h.getValue()));
     return headersMap;
