@@ -62,6 +62,7 @@ public class VideoResource {
     return fullVideoResponse(video.get());
   }
 
+  @SuppressWarnings("JdkObsolete")
   private Optional<Response> evaluateConditionalHeaders(File file, Request request) {
     ResponseBuilder notModifiedResponseBuilder = request
         .evaluatePreconditions(new Date(file.lastModified()));
@@ -73,6 +74,7 @@ public class VideoResource {
         && (ifRange.isEmpty() || ifRangePreconditionMatches(ifRange.get(), file));
   }
 
+  @SuppressWarnings("JdkObsolete")
   private boolean ifRangePreconditionMatches(String ifRangeHeader, File file) {
     ZonedDateTime ifRangeLastModified = ZonedDateTime.parse(ifRangeHeader, httpDateFormat);
     ZonedDateTime fileLastModified = ZonedDateTime.parse(
@@ -82,6 +84,7 @@ public class VideoResource {
     return ifRangeLastModified.equals(fileLastModified);
   }
 
+  @SuppressWarnings("JdkObsolete")
   private Response fullVideoResponse(File file) {
     StreamingOutput stream = createStream(Files.asByteSource(file));
     return Response.ok()
@@ -92,6 +95,7 @@ public class VideoResource {
         .build();
   }
 
+  @SuppressWarnings("JdkObsolete")
   private Response videoPartResponse(File file, String rangeHeader) {
     Range range = calculateRange(file, rangeHeader);
     ByteSource filePart = sliceFile(file, range);
