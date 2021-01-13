@@ -10,7 +10,7 @@
 
   <properties>
     <java.version>14</java.version>
-    <dropwizard.version>2.0.17</dropwizard.version>
+    <dropwizard.version>2.0.18</dropwizard.version>
     <error_prone.version>2.4.0</error_prone.version>
     <mvn-test-plugins.version>3.0.0-M5</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
