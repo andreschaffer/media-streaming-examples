@@ -34,6 +34,7 @@ jobs:
         run: mvn -B verify -Pcode-coverage --file pom.xml
 
       - name: Code Coverage Report
+        if: ${{ github.actor != 'dependabot[bot]' }}
         env:
           GIT_BRANCH: ${GITHUB_REF/refs\/heads\//}
           JACOCO_SOURCE_PATH: src/main/java
