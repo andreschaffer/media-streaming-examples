@@ -10,8 +10,11 @@ on:
     branches: [ master ]
 
 jobs:
-
   build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        java-version: [ 14 ]  
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,8 +22,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2.3.0
         with:
-          java-version: 14
-          distribution: 'adopt'
+          java-version: ${{ matrix.java-version }}
+          distribution: 'zulu'
 
       - name: Cache
         uses: actions/cache@v2.1.4
