@@ -24,6 +24,11 @@ TL;DR flow explanation:
  We achieve that via Conditional Requests ([RFC 7232](https://tools.ietf.org/html/rfc7232), [https://github.com/andreschaffer/http-caching-and-concurrency-examples](https://github.com/andreschaffer/http-caching-and-concurrency-examples));
  in this project specifically we explored that with the headers "Last-Modified" and "If-Range".
 
+# Remember, not all viewers are equal
+This project does not explore adapting playback to the viewers' network conditions. So, depending on their bandwith, even with progressive downloads, buffering waiting times may still happen. A common technique to improve on that is known as [Adaptive Bitrate Streaming](https://en.wikipedia.org/wiki/Adaptive_bitrate_streaming), which aims to deliver the optimal viewer experience considering their bandwith.
+
+For a complete read about video streaming, check the excellent source [HowVideo.works](https://howvideo.works/).
+
 # Project Requirements
 - Java 14
 - Maven
