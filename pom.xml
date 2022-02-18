@@ -159,7 +159,11 @@
             <configuration>
               <rules>
                 <banDuplicatePomDependencyVersions/>
-                <requireUpperBoundDeps/>
+                <requireUpperBoundDeps>
+                  <excludes>
+                    <exclude>org.jboss.logging:jboss-logging</exclude>
+                  </excludes>
+                </requireUpperBoundDeps>
               </rules>
             </configuration>
           </execution>
