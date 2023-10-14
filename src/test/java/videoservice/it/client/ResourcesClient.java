@@ -8,14 +8,13 @@ import static org.glassfish.jersey.logging.LoggingFeature.DEFAULT_LOGGER_NAME;
 import static org.glassfish.jersey.logging.LoggingFeature.Verbosity.PAYLOAD_ANY;
 
 import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Map.Entry;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
 import org.glassfish.jersey.logging.LoggingFeature;
 
 public class ResourcesClient {

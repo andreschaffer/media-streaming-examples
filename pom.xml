@@ -9,9 +9,10 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <java.version>14</java.version>
+    <java.version>19</java.version>
     <dropwizard.version>4.0.2</dropwizard.version>
-    <jersey.version>2.37</jersey.version>
+    <jersey.version>3.0.11</jersey.version>
+    <jakarta.version>2.1.1</jakarta.version>
     <error_prone.version>2.22.0</error_prone.version>
     <mvn-test-plugins.version>3.1.2</mvn-test-plugins.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -87,6 +88,18 @@
       </dependency>
 
       <dependency>
+        <groupId>jakarta.annotation</groupId>
+        <artifactId>jakarta.annotation-api</artifactId>
+        <version>${jakarta.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>jakarta.activation</groupId>
+        <artifactId>jakarta.activation-api</artifactId>
+        <version>${jakarta.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.checkerframework</groupId>
         <artifactId>checker-qual</artifactId>
         <version>3.38.0</version>
@@ -141,7 +154,8 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>3.3.0</version>
         <configuration>
-          <encoding>UTF-8</encoding>
+          <inputEncoding>UTF-8</inputEncoding>
+          <outputEncoding>UTF-8</outputEncoding>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <violationSeverity>warning</violationSeverity>
@@ -167,7 +181,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.2.1</version>
+        <version>3.4.1</version>
         <executions>
           <execution>
             <id>enforce</id>
@@ -179,9 +193,6 @@
               <rules>
                 <banDuplicatePomDependencyVersions/>
                 <requireUpperBoundDeps>
-                  <excludes>
-                    <exclude>org.jboss.logging:jboss-logging</exclude>
-                  </excludes>
                 </requireUpperBoundDeps>
               </rules>
             </configuration>

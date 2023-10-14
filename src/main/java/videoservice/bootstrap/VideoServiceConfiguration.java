@@ -3,9 +3,9 @@ package videoservice.bootstrap;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
+import jakarta.validation.constraints.NotNull;
 import java.io.File;
-import javax.validation.constraints.NotNull;
 
 public class VideoServiceConfiguration extends Configuration {
 
