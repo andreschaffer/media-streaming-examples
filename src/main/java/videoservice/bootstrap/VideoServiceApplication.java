@@ -2,11 +2,11 @@ package videoservice.bootstrap;
 
 import static org.glassfish.jersey.CommonProperties.OUTBOUND_CONTENT_LENGTH_BUFFER;
 
-import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
-import io.dropwizard.setup.Bootstrap;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.Application;
+import io.dropwizard.core.setup.Bootstrap;
+import io.dropwizard.core.setup.Environment;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import videoservice.repository.VideosRepository;
 import videoservice.resources.VideoResource;

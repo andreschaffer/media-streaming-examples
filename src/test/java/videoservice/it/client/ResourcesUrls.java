@@ -1,6 +1,7 @@
 package videoservice.it.client;
 
-import static javax.ws.rs.core.UriBuilder.fromUri;
+
+import static jakarta.ws.rs.core.UriBuilder.fromUri;
 
 import java.net.URI;
 
